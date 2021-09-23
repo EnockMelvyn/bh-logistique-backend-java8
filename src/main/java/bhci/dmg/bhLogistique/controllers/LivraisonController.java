@@ -34,7 +34,7 @@ public class LivraisonController {
                 livraisons.add(livraisonService.getLivraisonByNumeroBl(numeroBL));
             }
             if (livraisons.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(livraisons, HttpStatus.OK);
             }
 
             return new ResponseEntity<>(livraisons, HttpStatus.OK);

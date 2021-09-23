@@ -57,7 +57,7 @@ public class DemandeController {
             }
             
             if (demandes.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(demandes,HttpStatus.OK);
             }
             return new ResponseEntity<>(demandes, HttpStatus.OK);
         } catch (Exception e) {

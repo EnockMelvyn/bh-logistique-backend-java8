@@ -1,10 +1,16 @@
 package bhci.dmg.bhLogistique.services;
 
+import bhci.dmg.bhLogistique.dao.Article;
+import bhci.dmg.bhLogistique.dao.Commande;
 import bhci.dmg.bhLogistique.dao.Livraison;
 import bhci.dmg.bhLogistique.dao.LivraisonDetail;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
+import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.enums.TypeMouvement;
+import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.LivraisonRepository;
+import bhci.dmg.bhLogistique.repository.StatusRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +23,18 @@ public class LivraisonService {
 
     @Autowired
     LivraisonRepository livraisonRepository;
+    
+    @Autowired
+    ArticleRepository articleRepository;
 
+    @Autowired
     MouvementStockService mouvementStockService;
+    
+    @Autowired
+    StatusRepository statusRepository;
+    
+    @Autowired
+    CommandeService commandeService;
 
     public List<Livraison> getAllLivraisons() {
         /*List<Livraison> livraisons= new ArrayList<Livraison>();
@@ -70,6 +86,7 @@ public class LivraisonService {
         livraison1.setDateLivraison(livraison.getDateLivraison());
         livraison1.setNumeroBl(livraison.getNumeroBl());
         livraison1.setFournisseur(livraison.getFournisseur());
+        livraison1.setCommande(livraison.getCommande());
         livraison1.setLivraisonDetails(new ArrayList<LivraisonDetail>());
         for(LivraisonDetail livraisonDetail: livraison.getLivraisonDetails()){
             LivraisonDetail newLivDet = new LivraisonDetail();
@@ -89,7 +106,22 @@ public class LivraisonService {
                             TypeMouvement.ENTREE,
                             livraisonDetail.getPrixUnitaire()
                     )
-            ));
+                )
+            		
+    		);
+            
+            //maj de l'article
+            Article article = articleRepository.getById(livraisonDetail.getArticle().getIdArticle());
+            int qteFinale = article.getQuantiteStock()+livraisonDetail.getQuantite();
+            double newCmup = ((article.getCmup()*article.getQuantiteStock()) + (livraisonDetail.getQuantite()*livraisonDetail.getPrixUnitaire()))/ qteFinale;
+            
+            article.setCmup(newCmup);article.setQuantiteStock(qteFinale);
+            articleRepository.save(article);
+            
+            //maj de la commande
+            Commande commande = commandeService.getCommandeById(livraison1.getCommande().getIdCommande());
+            commande.setStatus(statusRepository.findByCodeStatut("LIV"));
+            commandeService.updateCommande(commande.getIdCommande(), commande);
         }
 
 

@@ -3,6 +3,7 @@ package bhci.dmg.bhLogistique.services;
 import bhci.dmg.bhLogistique.dao.*;
 import bhci.dmg.bhLogistique.enums.StatutDemande;
 import bhci.dmg.bhLogistique.enums.TypeMouvement;
+import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.SortieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.List;
 public class SortieService {
 
 
+	@Autowired
+	ArticleRepository articleRepository;
     @Autowired
     SortieRepository sortieRepository;
     @Autowired
@@ -68,14 +71,22 @@ public class SortieService {
         ));
 
         // MAJ de stock article dans la BD
-        Article articleUp = sortie.getArticle();
-        articleUp.setQuantiteStock(sortie.getArticle().getQuantiteStock()+sortie.getQuantite());
-        articleService.updateArticle(articleUp.getIdArticle(), articleUp);
+        Article article = articleService.getArticleById(sortie.getArticle().getIdArticle());
+        int qteFinale = article.getQuantiteStock()-sortie.getQuantite();
+        if (qteFinale<0) {
+            throw new IllegalStateException("Quantité insuffisante");
+        }
+        article.setQuantiteStock(qteFinale);
+        articleService.updateArticle(article.getIdArticle(), article);
 
         // MAJ du statut de la demande
-        Demande demandeUp = sortie.getDemande();
-        demandeUp.setStatutDemande(StatutDemande.VISA_DEMANDEUR.getValue());
-        demandeService.updateDemande(demandeUp.getIdDemande(), demandeUp);
+        try {
+    		Demande demandeUp = sortie.getDemande();
+	        demandeUp.setStatutDemande(StatutDemande.VISA_DEMANDEUR.getValue());
+	        demandeService.updateDemande(demandeUp.getIdDemande(), demandeUp);
+        } catch (Exception e) {
+        	throw new IllegalStateException("Aucune demande n'a été enregistrée"); 
+        }
         return sortieRepository.save(sortie);
     }
 }

@@ -24,6 +24,10 @@ public class Livraison implements Serializable {
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
+    
+    @OneToOne
+    @JoinColumn(name = "commande_id")
+    private Commande commande;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
