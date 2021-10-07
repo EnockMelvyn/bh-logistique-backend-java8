@@ -12,5 +12,5 @@ public interface DemandeArticleRepository extends JpaRepository<DemandeArticle, 
 
     List<DemandeArticle> findByDemande (Demande demande);
 
-
+    List<DemandeArticle> findByDemandeAndIsDeleted (Demande demande, Boolean isDeleted);
 }

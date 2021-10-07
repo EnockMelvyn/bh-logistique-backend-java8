@@ -1,8 +1,11 @@
 package bhci.dmg.bhLogistique.controllers;
 
 import bhci.dmg.bhLogistique.dao.Demande;
+import bhci.dmg.bhLogistique.dto.DemandeDto;
 import bhci.dmg.bhLogistique.enums.StatutDemande;
 import bhci.dmg.bhLogistique.services.DemandeService;
+import lombok.extern.java.Log;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/demandes")
+@RequestMapping("api/demandes")
 public class DemandeController {
 
     @Autowired
@@ -78,7 +82,33 @@ public class DemandeController {
 
     @PostMapping
     public ResponseEntity<Demande> createDemande(@RequestBody Demande demande) {
+    	log.info("----------------- create demande ----------");
         return new ResponseEntity<>(demandeService.createDemande(demande), HttpStatus.CREATED);
+    }
+    
+    
+    @PostMapping("/create")
+    public ResponseEntity<DemandeDto> createDemandeV2(@RequestBody DemandeDto demandeDto) {
+    	log.info("-- Création d'une demande ...");
+    	DemandeDto createResponse = demandeService.createDemandeV2(demandeDto);
+    	log.info("-- Création terminée.");
+        return new ResponseEntity<>(createResponse, HttpStatus.CREATED);
+    }
+    
+    @PostMapping("/update")
+    public ResponseEntity<DemandeDto> updateDemande(@RequestBody DemandeDto demandeDto) {
+    	log.info("-- Mise à jour d'une demande ...");
+    	DemandeDto updateResponse = demandeService.updateDemande(demandeDto);
+    	log.info("-- Mise à jour terminée.");
+        return new ResponseEntity<>(updateResponse, HttpStatus.CREATED);
+    }
+    
+    @PostMapping("/delete")
+    public ResponseEntity<DemandeDto> deleteDemande(@RequestBody DemandeDto demandeDto) {
+    	log.info("-- Suppression d'une demande ...");
+    	DemandeDto createResponse = demandeService.deleteDemande(demandeDto);
+    	log.info("-- Suppression terminée.");
+        return new ResponseEntity<>(createResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idDemande}")

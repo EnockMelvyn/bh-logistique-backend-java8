@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findByCodeArticle(String codeArticle);
-
+    
+    Article findByIdArticle(Long idArticle);
+    
     List<Article> findBySousFamille(SousFamille sousfamille);
 
     Optional<Article> findByLibelleArticle(String libelleArticle);
