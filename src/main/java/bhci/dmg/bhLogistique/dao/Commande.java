@@ -25,6 +25,10 @@ public class Commande implements Serializable {
 
     @Column(name = "numero_commande",unique = true)
     private String numeroCommande;
+    
+    @ManyToOne
+    @JoinColumn(name = "fournisseur_id")
+    private Fournisseur fournisseur;
 
     @Column(name = "date_commande")
     private LocalDate dateCommande;

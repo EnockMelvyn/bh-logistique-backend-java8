@@ -167,6 +167,7 @@ public class DemandeService {
 		} else {
 			// STATUS par défaut s'il y a lieu
 			Status exitedStatus = statusRepository.findByCodeStatut(CodeStatut.EN_ATTENTE.getValue());
+			System.out.println(exitedStatus);
 			demandeToSave.setStatus(exitedStatus);
 		}
 
