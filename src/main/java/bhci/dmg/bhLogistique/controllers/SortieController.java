@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/sorties")
+@RequestMapping("api/sorties")
 public class SortieController {
     @Autowired
     SortieService sortieService;
@@ -33,6 +33,7 @@ public class SortieController {
             }
             return new ResponseEntity<>(sorties, HttpStatus.OK);
         } catch (Exception e) {
+        	e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
