@@ -1,13 +1,15 @@
 package bhci.dmg.bhLogistique.dao;
 
-import bhci.dmg.bhLogistique.enums.StatutDemande;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import bhci.dmg.bhLogistique.enums.StatutDemande;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,13 +37,25 @@ public class Demande implements Serializable {
     private String observation;
 
     @Column(name = "date_demande")
-    private LocalDate dateDemande;
+    private LocalDateTime dateDemande;
 
     @Column(name = "demandeur")
     private String demandeur;
 
     @Column(name = "statut")
     private String statutDemande = StatutDemande.EN_ATTENTE.getValue();
+    
+    @ManyToOne
+    @JoinColumn(name = "id_status")
+    private Status status;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_categorie")
+    private Categorie categorieDemande;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_type")
+    private Type typeDemande;
 
     @Column(name = "urgent")
     private boolean urgent;
@@ -53,21 +67,25 @@ public class Demande implements Serializable {
     private String motifRejet;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "created_by")
-    private String createdBy;
+    private Integer createdBy;
 
     @Column(name = "modified_at")
-    private LocalDate modifiedAt;
+    private LocalDateTime modifiedAt;
 
     @Column(name = "modified_by")
     private String modifiedBy;
+    
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     @OneToMany(
-    mappedBy = "demande",
+    mappedBy = "demande"/*,
     cascade = CascadeType.ALL,
-    orphanRemoval = true)
+    orphanRemoval = true*/
+    )
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<DemandeArticle> demandeArticles;
 
