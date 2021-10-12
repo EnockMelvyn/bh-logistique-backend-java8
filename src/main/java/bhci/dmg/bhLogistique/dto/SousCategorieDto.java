@@ -1,7 +1,5 @@
 package bhci.dmg.bhLogistique.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -14,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonPropertyOrder(alphabetic = true)
-public class CategorieDto {
-    private Integer idCategorie;
-    private String libelleCategorie;
-    private String codeCategorie;
-    private String descriptionCategorie;
-    List<SousCategorieDto> sousCategories;
+public class SousCategorieDto {
+    private Integer idSousCategorie;
+    private Integer categorieIdCategorie;
+    private String libelleSousCategorie;
+    private String codeSousCategorie;
+    private String descriptionSousCategorie;
 }
