@@ -75,6 +75,11 @@ public class CommandeController {
     public ResponseEntity<Commande> createCommande(@RequestBody Commande commande) {
         return new ResponseEntity<>(commandeService.createCommande(commande), HttpStatus.CREATED);
     }
+    
+    @PutMapping
+    public ResponseEntity<Commande> updateCommande(@RequestBody Commande commande) {
+        return new ResponseEntity<>(commandeService.updateCommande(commande.getIdCommande(), commande), HttpStatus.OK);
+    }
 
     @PutMapping("/validate")
     public ResponseEntity<Commande> validateCommande(@RequestParam("idCommande") Long idCommande) {

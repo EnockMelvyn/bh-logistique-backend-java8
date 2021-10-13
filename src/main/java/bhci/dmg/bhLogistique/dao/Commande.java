@@ -62,12 +62,12 @@ public class Commande implements Serializable {
     private List<CommandeDetail> commandeDetails;
 
     public void addCommandeDetail(CommandeDetail cmdDet) {
-        commandeDetails.add(cmdDet);
+        this.commandeDetails.add(cmdDet);
         cmdDet.setCommande(this);
     }
 
     public void removeCommandeDetail(CommandeDetail cmdDet) {
-        commandeDetails.remove(cmdDet);
+        this.commandeDetails.remove(cmdDet);
         cmdDet.setCommande(null);
     }
 }

@@ -20,6 +20,7 @@ public class DashboardDemande {
 
 	private Double nombre;
 	@Id
+	private long id;
 	private String demandeur;
 	private String statut;
 }

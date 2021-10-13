@@ -44,7 +44,14 @@ public class CommandeService {
         Commande commande1 = commandeRepository.findById(idCommande).orElseThrow(() ->
                 new IllegalStateException(" L'id famille:" + idCommande+" n'existe pas"));
 
-        commande1.setStatus(commande.getStatus());
+        commande1.setStatus(statusRepository.findByCodeStatut("ATT"));
+        commande1.setDateCommande(commande.getDateCommande());
+        commande1.setFournisseur(commande.getFournisseur());
+        commande1.setNumeroCommande(commande.getNumeroCommande());
+        //commande1.getCommandeDetails(new ());
+        commande.getCommandeDetails().forEach(comDet -> commande1.addCommandeDetail(comDet));
+        commande1.setUpdatedAt(LocalDate.now());
+        
 
         return commandeRepository.save(commande1);
     }
