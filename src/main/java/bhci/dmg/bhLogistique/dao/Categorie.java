@@ -2,6 +2,8 @@ package bhci.dmg.bhLogistique.dao;
 
 import lombok.Data;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Table( name = "t_categorie")
@@ -18,4 +20,7 @@ public class Categorie {
     private String codeCategorie;
     @Column(name = "description_categorie")
     private String descriptionCategorie;
+    @OneToMany(
+    	    mappedBy = "categorie", cascade = CascadeType.ALL)
+    List<SousCategorie> sousCategorie;
 }

@@ -17,9 +17,11 @@ import bhci.dmg.bhLogistique.repository.DemandeRepository;
 import bhci.dmg.bhLogistique.repository.StatusRepository;
 import bhci.dmg.bhLogistique.repository.TypeRepository;
 import bhci.dmg.bhLogistique.transformer.Transformer;
+import bhci.dmg.bhLogistique.utils.Utilities;
 import lombok.extern.java.Log;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +32,18 @@ import java.util.List;
 @Log
 @Service
 public class DemandeService {
-
+	@Value("${notification.server.backend.url}")
+	private String notifServerUrl ;
+    
+	@Value("${notification.server.backend.content}")
+	private String notifServerContent ;
+	
+	@Value("${notification.server.backend.subject}")
+	private String notifServerSubject ;
+	
+	@Value("${notification.server.backend.from}")
+	private String notifServerFrom ;
+	
 	@Autowired
 	private DemandeRepository demandeRepository;
 
@@ -209,6 +222,14 @@ public class DemandeService {
 
 		DemandeDto response = transformer.convertToDto(demandeSaved);
 		response.setDemandeArticles(demandeArticlesDto);
+		
+		/*String contentMail = "{\r\n   "
+				+ " \"to\": \""+demandeDto.getDemandeur()+"\",\r\n    "
+				+ "\"subject\": \""+notifServerSubject+"\",\r\n    "
+				+ "\"from\": \"serviceED@bhci.ci\",\r\n    "
+				+ "\"content\": \""+notifServerContent+"\"\r\n}";*/
+		
+		Utilities.notificationMail(notifServerUrl, demandeDto.getDemandeur(), notifServerSubject, notifServerFrom, notifServerContent);
 		return response;
 	}
 
@@ -331,6 +352,7 @@ public class DemandeService {
 		demandeSaved.setDemandeArticles(null);
 		DemandeDto response = transformer.convertToDto(demandeSaved);
 		response.setDemandeArticles(demandeArticlesDto);
+		//Utilities.notificationMail(notifServerUrl, notifServerContent);
 		return response;
 	}
 
@@ -368,6 +390,7 @@ public class DemandeService {
 		log.info("-- delete end ...");
 		DemandeDto demandeDeletedDto = new DemandeDto();
 		demandeDeletedDto.setIsDeleted(Boolean.TRUE);
+		
 		return demandeDeletedDto;
 	}
 }

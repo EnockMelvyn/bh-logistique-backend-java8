@@ -1,9 +1,7 @@
 package bhci.dmg.bhLogistique.controllers;
 
 import bhci.dmg.bhLogistique.dao.Commande;
-import bhci.dmg.bhLogistique.dao.Demande;
 import bhci.dmg.bhLogistique.services.CommandeService;
-import bhci.dmg.bhLogistique.services.DemandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

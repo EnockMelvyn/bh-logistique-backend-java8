@@ -29,7 +29,6 @@ public class CategorieService {
 	private Transformer<CategorieDto, Categorie> transformer = new Transformer<CategorieDto, Categorie>(CategorieDto.class,
 			Categorie.class);
 	
-	
 	public List<CategorieDto> getAllCategorie(){
 		log.info("-- get all categorie ...");
 		List<CategorieDto> response = new ArrayList<CategorieDto>();
@@ -39,7 +38,6 @@ public class CategorieService {
         log.info("-- get all categorie finish.");
 		return response;
 	}
-	
 	
 	public CategorieDto createCategorie(CategorieDto categorieDto){
 		log.info("-- create categorie begin ...");
