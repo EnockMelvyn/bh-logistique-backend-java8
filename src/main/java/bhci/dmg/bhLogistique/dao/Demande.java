@@ -41,6 +41,10 @@ public class Demande implements Serializable {
 
     @Column(name = "demandeur")
     private String demandeur;
+    
+    @ManyToOne
+    @JoinColumn(name = "directionDemandeur")
+    private Direction directionDemandeur;
 
     @Column(name = "statut")
     private String statutDemande = StatutDemande.EN_ATTENTE.getValue();
