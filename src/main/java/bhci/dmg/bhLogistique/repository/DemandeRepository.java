@@ -1,6 +1,8 @@
 package bhci.dmg.bhLogistique.repository;
 
 import bhci.dmg.bhLogistique.dao.Demande;
+import bhci.dmg.bhLogistique.dao.Direction;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
@@ -23,6 +25,8 @@ public interface DemandeRepository extends JpaRepository<Demande, Long> {
     Demande findByIdDemandeAndIsDeleted(Long idDemande, Boolean isDeleted);
 
     List<Demande> findDemandesByDemandeur(String demandeur);
+    
+    List<Demande> findDemandesByStatutDemandeAndDirectionDemandeur(String statutDemande, Direction directionDemandeur);
 
     List<Demande> findDemandesByStatutDemande(String statutDemande);
 }

@@ -68,6 +68,20 @@ public class DemandeController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/statutEtDirection")
+    public ResponseEntity<List<Demande>> getDemandesByStatutDemandeAndDirectionDemandeur(@RequestParam(required = false) String statut, @RequestParam(required = false) Long idDirection) {
+
+        try {
+        	List<Demande> demandes = new ArrayList<Demande>();
+        	demandes = demandeService.getDemandesByStatutDemandeAndDirectionDemandeur(statut, idDirection);
+        	return new ResponseEntity<>(demandes, HttpStatus.OK);
+        	
+        }
+            catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{idDemande}")
     public ResponseEntity<Demande> getDemandeById(@PathVariable Long idDemande){

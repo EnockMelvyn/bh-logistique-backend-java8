@@ -4,6 +4,7 @@ import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.Categorie;
 import bhci.dmg.bhLogistique.dao.Demande;
 import bhci.dmg.bhLogistique.dao.DemandeArticle;
+import bhci.dmg.bhLogistique.dao.Direction;
 import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.dao.Type;
 import bhci.dmg.bhLogistique.dto.DemandeArticleDto;
@@ -14,6 +15,7 @@ import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.CategorieRepository;
 import bhci.dmg.bhLogistique.repository.DemandeArticleRepository;
 import bhci.dmg.bhLogistique.repository.DemandeRepository;
+import bhci.dmg.bhLogistique.repository.DirectionRepository;
 import bhci.dmg.bhLogistique.repository.StatusRepository;
 import bhci.dmg.bhLogistique.repository.TypeRepository;
 import bhci.dmg.bhLogistique.transformer.Transformer;
@@ -45,6 +47,9 @@ public class DemandeService {
 	private String notifServerFrom ;
 	
 	@Autowired
+	private DirectionRepository directionRepository;
+	
+	@Autowired
 	private DemandeRepository demandeRepository;
 
 	@Autowired
@@ -67,6 +72,10 @@ public class DemandeService {
 
 	public List<Demande> getAllDemandes() {
 		return demandeRepository.findAll();
+	}
+	
+	public List<Demande> getDemandesByStatutDemandeAndDirectionDemandeur(String statutDemande, Long dirDemandeur) {
+		return demandeRepository.findDemandesByStatutDemandeAndDirectionDemandeur(statutDemande, directionRepository.getById(dirDemandeur));
 	}
 
 	public Demande getDemandeById(Long idDemande) {

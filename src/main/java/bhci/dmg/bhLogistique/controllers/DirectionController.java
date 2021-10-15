@@ -23,6 +23,6 @@ public class DirectionController {
 	
 	@GetMapping
 	public ResponseEntity<List<Direction>> getAllDirections() {
-		return new ResponseEntity<>( directionService.getAllDirections(), HttpStatus.FOUND);
+		return new ResponseEntity<>( directionService.getAllDirections(), HttpStatus.OK);
 	}
 }
