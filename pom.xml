@@ -90,7 +90,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-                   <encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
