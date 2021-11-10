@@ -1,12 +1,8 @@
 package bhci.dmg.bhLogistique.dao;
-
-import bhci.dmg.bhLogistique.repository.FournisseurRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "t_fournisseur")

@@ -24,6 +24,8 @@ import lombok.extern.java.Log;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,13 +71,43 @@ public class DemandeService {
 
 	private Transformer<DemandeDto, Demande> transformer = new Transformer<DemandeDto, Demande>(DemandeDto.class,
 			Demande.class);
+	
+	private Transformer<DemandeArticleDto, DemandeArticle> transformerDemArt = new Transformer<DemandeArticleDto, DemandeArticle>(DemandeArticleDto.class,
+			DemandeArticle.class);
+
 
 	public List<Demande> getAllDemandes() {
 		return demandeRepository.findAll();
 	}
 	
 	public List<Demande> getDemandesByStatutDemandeAndDirectionDemandeur(String statutDemande, Long dirDemandeur) {
-		return demandeRepository.findDemandesByStatutDemandeAndDirectionDemandeur(statutDemande, directionRepository.getById(dirDemandeur));
+
+    	if (statutDemande == null && dirDemandeur == null) {
+    		return demandeRepository.findAll();
+    	} else if (statutDemande != null && dirDemandeur == null) {
+    		return demandeRepository.findDemandesByStatutDemande(statutDemande);
+    	} else if (statutDemande == null && dirDemandeur != null) {
+    		return demandeRepository.findDemandesByDirectionId(directionRepository.findById(dirDemandeur).get());
+    	}
+    		
+		return demandeRepository.findDemandesByStatutDemandeAndDirectionId(statutDemande, directionRepository.findById(dirDemandeur).get());
+	}
+	
+	public List<Demande> getDemandesByStatusAndDirectionDemandeur(Long idStatus, Long idDirection) {
+
+    	if (idStatus == null && idDirection == null) {
+    		System.out.println("etape 2");
+    		return demandeRepository.findAll();
+    	} else if (idStatus != null && idDirection == null) {
+    		System.out.println("etape 3");
+    		return demandeRepository.findDemandesByStatus(statusRepository.findById(idStatus).get());
+    	} else if (idStatus == null && idDirection != null) {
+    		System.out.println("etape 4");
+    		return demandeRepository.findDemandesByDirectionId(directionRepository.findById(idDirection).get());
+    	}
+    		
+    	System.out.println("etape 5");
+		return demandeRepository.findDemandesByStatusAndDirectionId(statusRepository.findById(idStatus).get(), directionRepository.findById(idDirection).get());
 	}
 
 	public Demande getDemandeById(Long idDemande) {
@@ -97,7 +129,18 @@ public class DemandeService {
 				.orElseThrow(() -> new IllegalStateException(" L'id famille:" + idDemande + " n'existe pas"));
 
 		demande1.setStatutDemande(demande.getStatutDemande());
-
+		demande1.setObservation(demande.getObservation());
+		
+		
+		demande.getDemandeArticles().forEach(element -> {
+		element.setDemande(demande1);
+		demandeArticleRepository.save(element);
+		});
+		demande1.setDemandeArticles(demande.getDemandeArticles());
+		
+		demande1.setModifiedAt(LocalDateTime.now());
+		demande1.setModifiedBy(demande.getDemandeur());
+		
 		return demandeRepository.save(demande1);
 	}
 
@@ -159,10 +202,6 @@ public class DemandeService {
 			throw new IllegalStateException("Demande non renseignée");
 		}
 
-		if (demandeDto.getNumRef() != null && demandeRepository.findByNumRefAndIsDeleted(demandeDto.getNumRef(), Boolean.FALSE).isPresent()) {
-			throw new IllegalStateException("Cette demande a déjà été enregistrée");
-		}
-
 		List<DemandeArticleDto> demandeArticlesDto = demandeDto.getDemandeArticles();
 		demandeDto.setDemandeArticles(null);
 		demandeToSave = transformer.convertToEntity(demandeDto);
@@ -193,7 +232,7 @@ public class DemandeService {
 			demandeToSave.setStatus(exitedStatus);
 		}
 
-		// renseignement du statut si renseigné
+		// renseignement de la catégorie si renseigné
 		if (demandeDto.getIdCategorie() != null) {
 			Categorie exitedCategorie = categorieRepository.findByIdCategorie(demandeDto.getIdCategorie().longValue());
 			if (exitedCategorie != null) {
@@ -202,8 +241,12 @@ public class DemandeService {
 				// Categorie par défaut si possible
 			}
 		}
+		demandeToSave.setDemandeDirection(null);
+		demandeToSave.setDirectionId(directionRepository.findById(demandeDto.getDirectionId()).get());
 		demandeToSave.setDateDemande(LocalDateTime.now());
 		demandeToSave.setCreatedAt(LocalDateTime.now());
+		// demandeToSave.setCreatedBy(demandeDto.getDemandeur());
+
 		demandeToSave.setIsDeleted(Boolean.FALSE);
 		Demande demandeSaved = demandeRepository.save(demandeToSave);
 
@@ -258,6 +301,8 @@ public class DemandeService {
 		}
 
 		List<DemandeArticleDto> demandeArticlesDto = demandeDto.getDemandeArticles();
+		
+		log.info(demandeArticlesDto.toString());
 
 		// mise à jour du type si renseigné
 		if (demandeDto.getIdType() != null) {
@@ -292,15 +337,7 @@ public class DemandeService {
 		if (demandeDto.getUrgent() != null) {
 			demandeToUpdate.setUrgent(demandeDto.getUrgent());
 		}
-
-		if (demandeDto.getCreatedBy() != null) {
-			demandeToUpdate.setCreatedBy(demandeDto.getCreatedBy());
-		}
-
-		if (demandeDto.getCreatedAt() != null) {
-			demandeToUpdate.setCreatedAt(demandeDto.getCreatedAt());
-		}
-
+		
 		if (demandeDto.getDateDemande() != null) {
 			demandeToUpdate.setDateDemande(demandeDto.getDateDemande());
 		}
@@ -327,10 +364,12 @@ public class DemandeService {
 			demandeToUpdate.setObservation(demandeDto.getObservation());
 		}
 
-		if (demandeDto.getObservation() != null) {
-			demandeToUpdate.setObservation(demandeDto.getObservation());
+		if (demandeArticlesDto != null && !demandeArticlesDto.isEmpty()) {
+			 demandeDto.getDemandeArticles().forEach(demandeArt -> {
+				 log.info(demandeArt.toString());
+				 demandeToUpdate.addArticles(demandeArticleRepository.findById(demandeArt.getIdDemandeArticle().longValue()).get());
+			 });
 		}
-
 		demandeToUpdate.setModifiedAt(LocalDateTime.now());
 		Demande demandeSaved = demandeRepository.save(demandeToUpdate);
 
@@ -356,7 +395,8 @@ public class DemandeService {
 				demandeArticleRepository.saveAll(demandeArticles);
 				log.info("--> Mise à jour des demandes articles terminée.");
 			}
-		}
+		} 
+		
 		log.info("-- update end ...");
 		demandeSaved.setDemandeArticles(null);
 		DemandeDto response = transformer.convertToDto(demandeSaved);
@@ -371,10 +411,12 @@ public class DemandeService {
 		List<DemandeArticle> oldDemandeArticles = demandeArticleRepository.findByDemandeAndIsDeleted(demandeSaved,
 				Boolean.FALSE);
 		oldDemandeArticles.stream().forEach(_oldDemadeArticle -> {
-			_oldDemadeArticle.setIsDeleted(Boolean.TRUE);
-			_oldDemadeArticle.setModifiedAt(LocalDateTime.now());
+			demandeArticleRepository.delete(_oldDemadeArticle);
+			/*_oldDemadeArticle.setIsDeleted(Boolean.TRUE);
+			_oldDemadeArticle.setModifiedAt(LocalDateTime.now());*/
 		});
-		demandeArticleRepository.saveAll(oldDemandeArticles);
+		//demandeArticleRepository.deleteAll(oldDemandeArticles);
+		//demandeArticleRepository.saveAll(oldDemandeArticles);
 		log.info("---> suppression des demanadeArticles terminée.");
 	}
 

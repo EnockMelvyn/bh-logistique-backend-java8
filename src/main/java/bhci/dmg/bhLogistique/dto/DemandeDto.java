@@ -1,3 +1,4 @@
+
 package bhci.dmg.bhLogistique.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -5,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class DemandeDto {
     private String demandeur;
     private Integer idStatus;
     private Integer idCategorie;
-   
+    private Long directionId;
     private Integer idType;
     private Boolean urgent;
     private String justifUrgence;

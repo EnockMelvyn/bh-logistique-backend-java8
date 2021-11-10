@@ -1,7 +1,6 @@
 package bhci.dmg.bhLogistique.services;
 
 import bhci.dmg.bhLogistique.dao.Commande;
-import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.repository.CommandeRepository;
 import bhci.dmg.bhLogistique.repository.StatusRepository;
 import lombok.extern.java.Log;
@@ -81,12 +80,7 @@ public class CommandeService {
         if (commandeRepository.findByNumeroCommande(commande.getNumeroCommande()).isPresent()){
             throw  new IllegalStateException(" Cette commande a déjà été enregistrée");
         }
-        if(commande == null) {
-            throw  new IllegalStateException(" La commande n'a pas été renseignée ");
-        }
-        if(commande.getNumeroCommande() == null) {
-            throw  new IllegalStateException(" Le numéro de la commande est obligatoire ");
-        }
+        
         if(commande.getDateCommande() == null) {
             commande.setDateCommande(LocalDate.now());
         }

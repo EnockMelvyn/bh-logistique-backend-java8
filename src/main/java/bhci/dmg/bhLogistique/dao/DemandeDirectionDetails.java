@@ -9,26 +9,32 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "t_demande_article")
+@Table(name = "t_demande_direction_details")
 @Data
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public class DemandeArticle implements Serializable {
+public class DemandeDirectionDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
     @Id
-    @Column(name = "id_demande_article", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idDemandeArticle;
+    private Long id;
 
-    @Column(name = "quantite")
-    private int quantite;
+    @Column(name = "quantite_demande")
+    private double quantiteDemande;
+    
+    @Column(name = "quantite_valide_direction")
+    private double quantiteValideDir;
+    
+    @Column(name = "quantite_valide_dmg")
+    private double quantiteValideDmg;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "demande_id")
+    @JoinColumn(name = "demande_direction_id")
     @JsonIgnore
-    private Demande demande;
+    private DemandeDirection demandeDirection;
 
     @ManyToOne
     @JoinColumn(name = "article_id")
@@ -49,21 +55,15 @@ public class DemandeArticle implements Serializable {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    public DemandeArticle() {
+    public DemandeDirectionDetails() {
     }
 
-    public DemandeArticle(int quantite, Demande demande, Article article) {
-        this.quantite = quantite;
-        this.demande = demande;
-        this.article = article;
-        this.isDeleted = Boolean.FALSE;
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DemandeArticle )) return false;
-        return idDemandeArticle != null && idDemandeArticle.equals(((DemandeArticle) o).getIdDemandeArticle());
+        if (!(o instanceof DemandeDirectionDetails )) return false;
+        return id != null && id.equals(((DemandeDirectionDetails) o).getId());
     }
 
     @Override

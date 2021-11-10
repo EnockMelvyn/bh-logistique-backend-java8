@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,9 +42,15 @@ public class Demande implements Serializable {
     private String demandeur;
     
     @ManyToOne
-    @JoinColumn(name = "directionDemandeur")
-    private Direction directionDemandeur;
+    @JoinColumn(name = "direction_id")
+    private Direction directionId;
 
+    @ManyToOne
+    @JoinColumn(name = "demande_direction_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private DemandeDirection demandeDirection;
+
+    
     @Column(name = "statut")
     private String statutDemande = StatutDemande.EN_ATTENTE.getValue();
     

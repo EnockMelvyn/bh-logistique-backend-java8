@@ -3,7 +3,6 @@ package bhci.dmg.bhLogistique.dao;
 
 
 import lombok.Data;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.io.Serializable;

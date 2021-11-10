@@ -3,7 +3,6 @@ package bhci.dmg.bhLogistique.dao;
 import bhci.dmg.bhLogistique.enums.TypeMouvement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

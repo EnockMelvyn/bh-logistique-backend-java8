@@ -1,7 +1,9 @@
 package bhci.dmg.bhLogistique.repository;
 
 import bhci.dmg.bhLogistique.dao.Demande;
+import bhci.dmg.bhLogistique.dao.DemandeDirection;
 import bhci.dmg.bhLogistique.dao.Direction;
+import bhci.dmg.bhLogistique.dao.Status;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -26,7 +28,15 @@ public interface DemandeRepository extends JpaRepository<Demande, Long> {
 
     List<Demande> findDemandesByDemandeur(String demandeur);
     
-    List<Demande> findDemandesByStatutDemandeAndDirectionDemandeur(String statutDemande, Direction directionDemandeur);
+    List<Demande> findDemandesByDirectionId(Direction directionDemandeur);
+    
+    List<Demande> findDemandesByStatutDemandeAndDirectionId(String statutDemande, Direction directionDemandeur);
+    
+    List<Demande> findDemandesByStatus(Status statut);
+    
+    List<Demande> findDemandesByStatusAndDirectionId(Status statut, Direction direction);
 
     List<Demande> findDemandesByStatutDemande(String statutDemande);
+    
+    List<Demande> findDemandesByDemandeDirection(DemandeDirection demandeDirection);
 }

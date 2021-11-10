@@ -1,6 +1,5 @@
 package bhci.dmg.bhLogistique.dto;
 
-import bhci.dmg.bhLogistique.dao.Fournisseur;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;

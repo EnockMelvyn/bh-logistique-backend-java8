@@ -25,6 +25,11 @@ public class StatusController {
     public ResponseEntity<List<StatusDto>> getAllStatus() {
        return new ResponseEntity<>(statutService.getAllStatus(), HttpStatus.OK);
     }
+    
+    @GetMapping("/status")
+    public ResponseEntity<StatusDto> getAllStatus(@RequestParam String codeStatus) {
+       return new ResponseEntity<>(statutService.getStatusByCode(codeStatus), HttpStatus.OK);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<StatusDto> createStatus(@RequestBody StatusDto statusDto) {

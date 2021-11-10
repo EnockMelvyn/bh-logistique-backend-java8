@@ -40,6 +40,16 @@ public class StatutService {
 		return response;
 	}
 	
+	public StatusDto getStatusByCode(String code){
+		log.info("-- get status by code...");
+		StatusDto response = new StatusDto();
+        Status status = statusRepository.findByCodeStatut(code);
+        if(status != null ) 
+        	response = transformer.convertToDto(status);
+        log.info("-- get all status finish.");
+		return response;
+	}
+	
 	
 	public StatusDto createStatus(StatusDto statusDto){
 		log.info("-- create status begin ...");

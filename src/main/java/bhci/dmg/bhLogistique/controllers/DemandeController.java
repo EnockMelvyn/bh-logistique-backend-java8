@@ -79,10 +79,27 @@ public class DemandeController {
         	
         }
             catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @GetMapping("/statusEtDirection")
+    public ResponseEntity<List<Demande>> getDemandesByStatusAndDirectionId(@RequestParam(required = false) Long idStatus, @RequestParam(required = false) Long idDirection) {
+
+        try {
+        	List<Demande> demandes = new ArrayList<Demande>();
+        	System.out.println("etape 1");
+        	demandes = demandeService.getDemandesByStatusAndDirectionDemandeur(idStatus, idDirection);
+        	return new ResponseEntity<>(demandes, HttpStatus.OK);
+        	
+        }
+            catch (Exception e) {
+            	e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
     @GetMapping("/{idDemande}")
     public ResponseEntity<Demande> getDemandeById(@PathVariable Long idDemande){
         Demande demande = new Demande();
