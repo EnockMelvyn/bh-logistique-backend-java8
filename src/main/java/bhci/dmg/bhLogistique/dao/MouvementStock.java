@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_mouvement_stock")
@@ -18,7 +18,7 @@ public class MouvementStock {
     @Column(name = "id_mouvement_stock", nullable = false)
     private Long idMouvementStock;
 
-    private LocalDate dateMouvement;
+    private LocalDateTime dateMouvement;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     @JsonIgnore
@@ -50,7 +50,7 @@ public class MouvementStock {
     public MouvementStock() {
     }
 
-    public MouvementStock(LocalDate dateMouvement, Article article, double qteAvant,double qteMouvement, TypeMouvement typeMouvement, Double prixUnitaire) {
+    public MouvementStock(LocalDateTime dateMouvement, Article article, double qteAvant,double qteMouvement, TypeMouvement typeMouvement, Double prixUnitaire) {
         this.dateMouvement = dateMouvement;
         this.article = article;
         this.qteAvant = qteAvant;

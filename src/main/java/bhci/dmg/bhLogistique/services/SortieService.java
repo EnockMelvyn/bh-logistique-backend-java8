@@ -8,7 +8,8 @@ import bhci.dmg.bhLogistique.repository.SortieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,20 +55,32 @@ public class SortieService {
 
     public Sortie createSortie(Sortie sortie) {
 
-        if (sortieRepository.findByReference(sortie.getReference()).isPresent()) {
+        /*if (sortieRepository.findByReference(sortie.getReference()).isPresent()) {
             throw new IllegalStateException("Cette sortie a déjà été utilisé");
-        }
+        }*/
 
-        // création et insertion en BD du mouvement de stock
+        // création et insertion en BD du mouvement de stocka
+    	MouvementStock mouvStock = new MouvementStock(
+                sortie.getDateSortie(),
+                sortie.getArticle(),
+                sortie.getArticle().getQuantiteStock(),
+                sortie.getQuantite(),
+                TypeMouvement.SORTIE,
+                sortie.getArticle().getCmup()
+        );
+    	mouvStock.setCreatedAt(Timestamp.from(Instant.now()));
+    	mouvStock.setCreatedBy(sortie.getCreatedBy());
+    	
         mouvementStockService.createMouvementStock(Arrays.asList(
-               new MouvementStock(
+              /* new MouvementStock(
                        sortie.getDateSortie(),
                        sortie.getArticle(),
                        sortie.getArticle().getQuantiteStock(),
                        sortie.getQuantite(),
                        TypeMouvement.SORTIE,
                        sortie.getArticle().getCmup()
-               )
+               )*/
+        		mouvStock
         ));
 
         // MAJ de stock article dans la BD
@@ -80,13 +93,17 @@ public class SortieService {
         articleService.updateArticle(article.getIdArticle(), article);
 
         // MAJ du statut de la demande
-        try {
-    		Demande demandeUp = sortie.getDemande();
-	        demandeUp.setStatutDemande(StatutDemande.VISA_DEMANDEUR.getValue());
-	        demandeService.updateDemande(demandeUp.getIdDemande(), demandeUp);
-        } catch (Exception e) {
-        	throw new IllegalStateException("Aucune demande n'a été enregistrée"); 
+        if (sortie.getDemande() !=null) {
+        	try {
+        		Demande demandeUp = sortie.getDemande();
+    	        demandeUp.setStatutDemande(StatutDemande.VISA_DEMANDEUR.getValue());
+    	        demandeService.updateDemande(demandeUp.getIdDemande(), demandeUp);
+            } catch (Exception e) {
+            	throw new IllegalStateException("Aucune demande n'a été enregistrée"); 
+            }
         }
+        
+                
         return sortieRepository.save(sortie);
     }
 }

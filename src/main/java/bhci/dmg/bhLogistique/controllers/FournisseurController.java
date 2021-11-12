@@ -1,8 +1,6 @@
 package bhci.dmg.bhLogistique.controllers;
 
-import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.Fournisseur;
-import bhci.dmg.bhLogistique.services.ArticleService;
 import bhci.dmg.bhLogistique.services.FournisseurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

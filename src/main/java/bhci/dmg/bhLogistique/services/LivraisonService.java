@@ -5,7 +5,6 @@ import bhci.dmg.bhLogistique.dao.Commande;
 import bhci.dmg.bhLogistique.dao.Livraison;
 import bhci.dmg.bhLogistique.dao.LivraisonDetail;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
-import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.enums.TypeMouvement;
 import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.LivraisonRepository;
@@ -111,7 +110,8 @@ public class LivraisonService {
     		);
             
             //maj de l'article
-            Article article = articleRepository.getById(livraisonDetail.getArticle().getIdArticle());
+           // Article article = articleRepository.getById(livraisonDetail.getArticle().getIdArticle());
+            Article article = livraisonDetail.getArticle();
             int qteFinale = article.getQuantiteStock()+livraisonDetail.getQuantite();
             double newCmup = ((article.getCmup()*article.getQuantiteStock()) + (livraisonDetail.getQuantite()*livraisonDetail.getPrixUnitaire()))/ qteFinale;
             
@@ -119,7 +119,8 @@ public class LivraisonService {
             articleRepository.save(article);
             
             //maj de la commande
-            Commande commande = commandeService.getCommandeById(livraison1.getCommande().getIdCommande());
+            // Commande commande = commandeService.getCommandeById(livraison1.getCommande().getIdCommande());
+            Commande commande = livraison1.getCommande();
             commande.setStatus(statusRepository.findByCodeStatut("LIV"));
             commandeService.updateCommande(commande.getIdCommande(), commande);
         }

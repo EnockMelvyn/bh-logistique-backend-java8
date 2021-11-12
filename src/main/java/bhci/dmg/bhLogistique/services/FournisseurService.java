@@ -1,6 +1,5 @@
 package bhci.dmg.bhLogistique.services;
 
-import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.Fournisseur;
 import bhci.dmg.bhLogistique.repository.FournisseurRepository;
 import org.springframework.beans.factory.annotation.Autowired;

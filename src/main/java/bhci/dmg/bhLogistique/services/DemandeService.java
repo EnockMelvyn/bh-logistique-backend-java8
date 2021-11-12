@@ -4,7 +4,6 @@ import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.Categorie;
 import bhci.dmg.bhLogistique.dao.Demande;
 import bhci.dmg.bhLogistique.dao.DemandeArticle;
-import bhci.dmg.bhLogistique.dao.Direction;
 import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.dao.Type;
 import bhci.dmg.bhLogistique.dto.DemandeArticleDto;
@@ -24,8 +23,6 @@ import lombok.extern.java.Log;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,10 +69,6 @@ public class DemandeService {
 	private Transformer<DemandeDto, Demande> transformer = new Transformer<DemandeDto, Demande>(DemandeDto.class,
 			Demande.class);
 	
-	private Transformer<DemandeArticleDto, DemandeArticle> transformerDemArt = new Transformer<DemandeArticleDto, DemandeArticle>(DemandeArticleDto.class,
-			DemandeArticle.class);
-
-
 	public List<Demande> getAllDemandes() {
 		return demandeRepository.findAll();
 	}
@@ -130,7 +123,8 @@ public class DemandeService {
 
 		demande1.setStatutDemande(demande.getStatutDemande());
 		demande1.setObservation(demande.getObservation());
-		
+		demande1.setUrgent(demande.isUrgent());
+		demande1.setJustifUrgence(demande.getJustifUrgence());
 		
 		demande.getDemandeArticles().forEach(element -> {
 		element.setDemande(demande1);

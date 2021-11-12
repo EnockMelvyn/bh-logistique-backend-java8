@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bhci.dmg.bhLogistique.dao.DemandeDirection;
 import bhci.dmg.bhLogistique.dao.Direction;
-import bhci.dmg.bhLogistique.dao.Status;
 import bhci.dmg.bhLogistique.services.DemandeDirectionService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -51,5 +50,10 @@ public class DemandeDirectionController {
 	@PutMapping("dmgValidate")
     public ResponseEntity<DemandeDirection> dmgValidateDemandeDirection(@RequestBody DemandeDirection demandeDirection) {
         return new ResponseEntity<>(demandeDirectionService.validationDmg(demandeDirection), HttpStatus.OK);
+    }
+	
+	@PutMapping("dmgSortie")
+    public ResponseEntity<DemandeDirection> dmgSotieDemandeDirection(@RequestBody DemandeDirection demandeDirection) {
+        return new ResponseEntity<>(demandeDirectionService.sortieDmg(demandeDirection), HttpStatus.OK);
     }
 }

@@ -58,7 +58,7 @@ public class DemandeDirection implements Serializable {
     private LocalDateTime createdAt;
 
     @Column(name = "created_by")
-    private Integer createdBy;
+    private String createdBy;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;

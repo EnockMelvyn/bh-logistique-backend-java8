@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class DemandeArticleParDirection {
 
 	@Column(name = "quantite")
-	private Double quantite;
+	private int quantite;
 	@Id
 	private Long id;
 	@Column(name = "id_direction")

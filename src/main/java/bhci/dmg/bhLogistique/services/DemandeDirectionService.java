@@ -3,6 +3,7 @@ package bhci.dmg.bhLogistique.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,8 @@ import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.DemandeDirection;
 import bhci.dmg.bhLogistique.dao.DemandeDirectionDetails;
 import bhci.dmg.bhLogistique.dao.Direction;
+import bhci.dmg.bhLogistique.dao.Sortie;
 import bhci.dmg.bhLogistique.dao.Status;
-import bhci.dmg.bhLogistique.enums.StatutDemande;
 import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.DemandeArticleParDirectionRepository;
 import bhci.dmg.bhLogistique.repository.DemandeDirectionDetailsRepository;
@@ -45,6 +46,9 @@ public class DemandeDirectionService {
 	@Autowired
 	StatusRepository statusRepository;
 	
+	@Autowired
+	SortieService sortieService;
+	
 	public List<DemandeDirection> getAllDemandeDirection(){
 		return demandeDirectionRepository.findAll();
 	}
@@ -57,16 +61,26 @@ public class DemandeDirectionService {
 	public DemandeDirection generateDemandeDirection(Long idDirection) {
 		Direction direction = directionRepository.findById(idDirection).get(); // Gerer l'exception
 		Status status = statusRepository.findByCodeStatut("ATT");
-		//DemandeDirection demandeDirectionToSave= new DemandeDirection();
+		DemandeDirection demandeDirection = new DemandeDirection();
 		
-		DemandeDirection demandeDirection =demandeDirectionRepository.findByDirectionAndStatus(direction, status).orElse(new DemandeDirection());
+		List<DemandeDirection> demandeDirections = demandeDirectionRepository.findByDirectionAndStatus(direction, status);
 		
-		if (demandeDirection.getId() != null) {
+		if (demandeDirections.size() >0) {
+			
+			// initialisation de la demande
+			demandeDirection.setId(demandeDirections.get(0).getId());
+			demandeDirection.setDateDemande(demandeDirections.get(0).getDateDemande());
+			demandeDirection.setStatus(status);
+			demandeDirection.setNumRef(demandeDirections.get(0).getNumRef());
+			demandeDirection.setDirection(demandeDirections.get(0).getDirection());
+			demandeDirection.setCreatedAt(demandeDirections.get(0).getCreatedAt());
+			demandeDirection.setDemandeDirectionDetails( demandeDirections.get(0).getDemandeDirectionDetails());
 			demandeDirection.setModifiedAt(LocalDateTime.now());
+			
 			// remplissage du tableau des articles demandés par direction
-			demArticleParDirRepo.findByIdDirectionAndIdStatus(idDirection, status.getIdStatut()).forEach(demArt -> {
+			 demArticleParDirRepo.findByIdDirectionAndIdStatus(idDirection, status.getIdStatut()).forEach(demArt -> {
 				Article article = articleRepository.findById(demArt.getIdArticle()).get();
-				DemandeDirectionDetails demDirDet = demDirDetRepo.findByArticle(article).orElse( new DemandeDirectionDetails());
+				DemandeDirectionDetails demDirDet = demDirDetRepo.findByArticleAndDemandeDirection(article,demandeDirection).orElse( new DemandeDirectionDetails());
 				if (demDirDet.getId() !=null) {
 					demDirDet.setModifiedAt(LocalDateTime.now());
 					demDirDet.setQuantiteDemande(demDirDet.getQuantiteDemande()+demArt.getQuantite());
@@ -94,7 +108,7 @@ public class DemandeDirectionService {
 			demandeDirection.setStatus(status);
 			demandeDirection.setDirection(direction);
 			demandeDirection.setCreatedAt(LocalDateTime.now());
-			
+			demandeDirection.setDemandeDirectionDetails(new ArrayList<>());
 			System.out.println("Enregistrement en cours");
 			
 			// remplissage du tableau des articles demandés par direction
@@ -105,10 +119,7 @@ public class DemandeDirectionService {
 				demDirDet.setArticle(articleRepository.findById(demArt.getIdArticle()).get());
 				demDirDet.setQuantiteDemande(demArt.getQuantite());
 				
-				List<DemandeDirectionDetails> tableau = new ArrayList<>();
-				demandeDirection.setDemandeDirectionDetails(tableau);
 				demandeDirection.addDetail(demDirDet);
-				//System.out.println(demandeDirection.toString());
 				});
 				
 				if ( demandeDirection.getDemandeDirectionDetails()==null || demandeDirection.getDemandeDirectionDetails().size() ==0) {
@@ -135,6 +146,7 @@ public class DemandeDirectionService {
 			element.setModifiedAt(LocalDateTime.now());
 			element.setDemandeDirection(demandeDirection);
 		});
+		
 		Status statusDMG = statusRepository.findByCodeStatut("DMG");
 		demDirDetRepo.saveAll(demandeDirection.getDemandeDirectionDetails());
 		demandeDirection.setStatus(statusDMG);
@@ -152,11 +164,6 @@ public class DemandeDirectionService {
 		demandeDirection.getDemandeDirectionDetails().forEach(element -> {
 			element.setModifiedAt(LocalDateTime.now());
 			element.setDemandeDirection(demandeDirection);
-			/*demDirToSave.getDemandeDirectionDetails().forEach( elm2 -> {
-				if(elm2.getId()== element.getId() && element.getQuantiteValideDir()>=0) {
-					elm2.setQuantiteValideDir(element.getQuantiteValideDir());
-				}
-			});*/
 				
 		});
 		
@@ -170,5 +177,35 @@ public class DemandeDirectionService {
 		return demandeDirectionRepository.save(demandeDirection);
 		
 	}
-	
+
+	public DemandeDirection sortieDmg(DemandeDirection demandeDirection) {
+		Status statusTRAITEE = statusRepository.findByCodeStatut("TRAITEE");
+		
+		if (demandeDirectionRepository.findById(demandeDirection.getId()).get().getStatus() == statusTRAITEE) {
+			throw new IllegalStateException("Cette demande a déjà été traitée");
+		}
+		
+		demandeDirection.getDemandeDirectionDetails().forEach(element -> {
+			element.setModifiedAt(LocalDateTime.now());
+			element.setDemandeDirection(demandeDirection);
+			Sortie sortie = new Sortie();
+			sortie.setCreatedBy(element.getModifiedBy());
+			sortie.setArticle(element.getArticle());
+			sortie.setDateSortie(LocalDateTime.now());
+			sortie.setDemandeDirection(demandeDirection);
+			sortie.setQuantite(element.getQuantiteValideDmg());
+			sortieService.createSortie(sortie);
+				
+		});
+		
+		
+		demDirDetRepo.saveAll(demandeDirection.getDemandeDirectionDetails());
+		demandeDirection.setStatus(statusTRAITEE);
+		demandeRepository.findDemandesByDemandeDirection(demandeDirection).forEach(dem -> {
+			dem.setStatus(statusTRAITEE);
+		});
+		demandeDirection.setModifiedAt(LocalDateTime.now());
+		return demandeDirectionRepository.save(demandeDirection);
+		
+	}
 }

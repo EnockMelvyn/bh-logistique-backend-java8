@@ -1,7 +1,6 @@
 package bhci.dmg.bhLogistique.repository;
 
 import bhci.dmg.bhLogistique.dao.Commande;
-import bhci.dmg.bhLogistique.dao.Demande;
 import bhci.dmg.bhLogistique.dao.Status;
 
 import org.springframework.data.jpa.repository.JpaRepository;

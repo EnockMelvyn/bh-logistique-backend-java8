@@ -1,6 +1,5 @@
 package bhci.dmg.bhLogistique.utils;
 
-import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
 import bhci.dmg.bhLogistique.enums.TypeMouvement;
 import bhci.dmg.bhLogistique.services.ArticleService;
@@ -10,12 +9,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -64,8 +61,7 @@ public class ExcelHelper {
 
                     switch (cellIdx) {
                     case 0:
-                        double dateMouv = currentCell.getNumericCellValue();
-                        mouvementStock.setDateMouvement(currentCell.getLocalDateTimeCellValue().toLocalDate());
+                        mouvementStock.setDateMouvement(currentCell.getLocalDateTimeCellValue());
                         break;
                     case 1:
                         try {

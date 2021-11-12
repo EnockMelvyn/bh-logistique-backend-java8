@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,7 @@ public class Livraison implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "date_livraison")
-    private LocalDate dateLivraison;
+    private LocalDateTime dateLivraison;
 
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")

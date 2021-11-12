@@ -3,13 +3,12 @@ package bhci.dmg.bhLogistique.services;
 import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
 import bhci.dmg.bhLogistique.repository.MouvementStockRepository;
-import bhci.dmg.bhLogistique.utils.ExcelHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,18 +71,30 @@ public class MouvementStockService {
 //    }
 
     public List<MouvementStock> createMouvementStock(List<MouvementStock> mouvementStock) {
-        List<MouvementStock> mouvEnregistres = new ArrayList<>();
-        for (MouvementStock mouvementStock1 : mouvementStock) {
-            mouvEnregistres.add(new MouvementStock(
+       // List<MouvementStock> mouvEnregistres = new ArrayList<>();
+        // for (MouvementStock mouvementStock1 : mouvementStock) {
+        	
+        	/*MouvementStock mouvStock = new MouvementStock(mouvementStock1.getDateMouvement(),
+                    mouvementStock1.getArticle(),
+                    mouvementStock1.getQteAvant(),
+                    mouvementStock1.getQteMouvement(),
+                    mouvementStock1.getTypeMouvement(),
+                    mouvementStock1.getPrixUnitaire());
+        	mouvStock.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));*/
+        //	mouvEnregistres.add(mouvStock1);
+        	
+            /*mouvEnregistres.add(new MouvementStock(
                     mouvementStock1.getDateMouvement(),
                     mouvementStock1.getArticle(),
                     mouvementStock1.getQteAvant(),
                     mouvementStock1.getQteMouvement(),
                     mouvementStock1.getTypeMouvement(),
                     mouvementStock1.getPrixUnitaire()
+                    
                     )
-            );
-        }
-        return mouvementStockRepository.saveAll(mouvEnregistres);
+            );*/
+        //}
+        // return mouvementStockRepository.saveAll(mouvEnregistres);
+        return mouvementStockRepository.saveAll(mouvementStock);
     }
 }

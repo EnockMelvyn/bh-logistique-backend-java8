@@ -14,6 +14,7 @@ import lombok.Data;
 @Data
 public class Direction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	@Id
 	private Long idDirection;
 	private String codeDirection;

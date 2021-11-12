@@ -1,12 +1,10 @@
 package bhci.dmg.bhLogistique.services;
 
-import bhci.dmg.bhLogistique.dao.Famille;
 import bhci.dmg.bhLogistique.dao.SousFamille;
 import bhci.dmg.bhLogistique.repository.SousFamilleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

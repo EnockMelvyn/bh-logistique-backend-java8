@@ -43,7 +43,7 @@ public class CommandeService {
         Commande commande1 = commandeRepository.findById(idCommande).orElseThrow(() ->
                 new IllegalStateException(" L'id famille:" + idCommande+" n'existe pas"));
 
-        commande1.setStatus(statusRepository.findByCodeStatut("ATT"));
+        commande1.setStatus(commande.getStatus());
         commande1.setDateCommande(commande.getDateCommande());
         commande1.setFournisseur(commande.getFournisseur());
         commande1.setNumeroCommande(commande.getNumeroCommande());
@@ -74,7 +74,6 @@ public class CommandeService {
     }
 
     public Commande createCommande(Commande commande){
-        Commande newCommande = new Commande();
 
         log.info("-- Création d'une nouvelle commande ! -- ");
         if (commandeRepository.findByNumeroCommande(commande.getNumeroCommande()).isPresent()){

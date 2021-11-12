@@ -23,14 +23,20 @@ public class DemandeDirectionDetails implements Serializable {
     private Long id;
 
     @Column(name = "quantite_demande")
-    private double quantiteDemande;
+    private int quantiteDemande;
     
     @Column(name = "quantite_valide_direction")
-    private double quantiteValideDir;
+    private int quantiteValideDir;
     
     @Column(name = "quantite_valide_dmg")
-    private double quantiteValideDmg;
+    private int quantiteValideDmg;
 
+    @Column(name = "quantite_sortie_dmg")
+    private int quantiteSortieDmg;
+    
+    @Column(name = "quantite_recue_direction")
+    private int quantiteRecueDir;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "demande_direction_id")
     @JsonIgnore

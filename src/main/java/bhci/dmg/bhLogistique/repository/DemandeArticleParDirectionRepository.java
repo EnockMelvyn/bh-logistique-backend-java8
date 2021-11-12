@@ -7,9 +7,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import bhci.dmg.bhLogistique.dao.DashboardDemande;
 import bhci.dmg.bhLogistique.dao.DemandeArticleParDirection;
-import bhci.dmg.bhLogistique.dao.Fournisseur;
 
 @Repository
 @EnableJpaRepositories

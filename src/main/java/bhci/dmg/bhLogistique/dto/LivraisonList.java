@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class LivraisonList {
-    private static final long serialVersionUID = 1L;
 
     @NotNull
     private LocalDate dateLivraison;

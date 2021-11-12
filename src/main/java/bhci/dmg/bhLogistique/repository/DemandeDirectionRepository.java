@@ -1,7 +1,6 @@
 package bhci.dmg.bhLogistique.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +12,11 @@ public interface DemandeDirectionRepository extends JpaRepository<DemandeDirecti
 	
 	List<DemandeDirection> findByStatus(Status status);
 	
-	Optional<DemandeDirection> findByDirection(Direction direction);
+	List<DemandeDirection> findByDirection(Direction direction);
 	
-	Optional<DemandeDirection> findByDirectionAndStatus(Direction direction, Status status);
+	//Optional<DemandeDirection> findByDirectionAndStatus(Direction direction, Status status);
+	
+	List<DemandeDirection> findByDirectionAndStatus(Direction direction, Status status);
+	
+	
 }
