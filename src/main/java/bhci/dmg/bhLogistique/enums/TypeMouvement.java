@@ -3,5 +3,6 @@ package bhci.dmg.bhLogistique.enums;
 public enum TypeMouvement {
     ENTREE,
     SORTIE,
-    MISE_AU_REBUS
+    MISE_AU_REBUS,
+    INVENTAIRE
 }

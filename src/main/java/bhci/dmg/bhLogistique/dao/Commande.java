@@ -39,6 +39,8 @@ public class Commande implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_status")
     private Status status;
+    
+    private boolean isLivraisonTotal;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
@@ -51,6 +53,8 @@ public class Commande implements Serializable {
 
     @Column(name = "updated_by")
     private Integer updatedBy;
+    
+    
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

@@ -53,7 +53,7 @@ public class Demande implements Serializable {
     
     @Column(name = "statut")
     private String statutDemande = StatutDemande.EN_ATTENTE.getValue();
-    
+
     @ManyToOne
     @JoinColumn(name = "id_status")
     private Status status;

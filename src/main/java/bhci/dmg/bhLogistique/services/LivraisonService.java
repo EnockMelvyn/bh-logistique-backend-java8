@@ -41,7 +41,6 @@ public class LivraisonService {
         return livraisonRepository.findAll();
     }
 
-
     public Livraison getLivraisonById(Long idLivraison){
         return  livraisonRepository.findById(idLivraison).orElseThrow(() ->
                 new IllegalStateException(" L'id famille:" + idLivraison +" n'existe pas")
@@ -121,7 +120,14 @@ public class LivraisonService {
             //maj de la commande
             // Commande commande = commandeService.getCommandeById(livraison1.getCommande().getIdCommande());
             Commande commande = livraison1.getCommande();
-            commande.setStatus(statusRepository.findByCodeStatut("LIV"));
+            System.out.println("-------------------------------------------------");
+            System.out.println(livraison1.getCommande().isLivraisonTotal());
+            System.out.println("-------------------------------------------------");            
+            if (livraison1.getCommande().isLivraisonTotal()) {
+            	commande.setStatus(statusRepository.findByCodeStatut("LIV"));
+            }
+            
+            
             commandeService.updateCommande(commande.getIdCommande(), commande);
         }
 

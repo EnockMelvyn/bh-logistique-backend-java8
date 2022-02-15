@@ -46,7 +46,7 @@ public class DemandeService {
 	private String notifServerFrom ;
 	
 	@Autowired
-	private DirectionRepository directionRepository;
+	private DirectionRepository directionRepository; 
 	
 	@Autowired
 	private DemandeRepository demandeRepository;
@@ -84,6 +84,10 @@ public class DemandeService {
     	}
     		
 		return demandeRepository.findDemandesByStatutDemandeAndDirectionId(statutDemande, directionRepository.findById(dirDemandeur).get());
+	}
+	
+	public List<Demande> getDemandeByDemandeur(String demandeur){
+		return demandeRepository.findDemandesByDemandeur(demandeur);
 	}
 	
 	public List<Demande> getDemandesByStatusAndDirectionDemandeur(Long idStatus, Long idDirection) {

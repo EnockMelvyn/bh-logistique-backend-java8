@@ -23,6 +23,11 @@ public class DemandeController {
     @Autowired
     DemandeService demandeService;
 
+    @GetMapping("/demandeur")
+    public ResponseEntity<List<Demande>> getDemandeByDemandeur(@RequestParam String demandeur) {
+    	return new ResponseEntity<List<Demande>>(demandeService.getDemandeByDemandeur(demandeur), HttpStatus.OK);
+    }
+    
     @GetMapping
     public ResponseEntity<List<Demande>> getAllDemandes(@RequestParam(required = false) String numRefDemande) {
 

@@ -3,10 +3,8 @@ package bhci.dmg.bhLogistique.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.DemandeDirection;
@@ -20,9 +18,10 @@ import bhci.dmg.bhLogistique.repository.DemandeDirectionDetailsRepository;
 import bhci.dmg.bhLogistique.repository.DemandeDirectionRepository;
 import bhci.dmg.bhLogistique.repository.DemandeRepository;
 import bhci.dmg.bhLogistique.repository.DirectionRepository;
+import bhci.dmg.bhLogistique.repository.ServiceRepository;
 import bhci.dmg.bhLogistique.repository.StatusRepository;
 
-@Service
+@org.springframework.stereotype.Service
 public class DemandeDirectionService {
 
 	@Autowired
@@ -30,6 +29,9 @@ public class DemandeDirectionService {
 	
 	@Autowired
 	DirectionRepository directionRepository;
+	
+	@Autowired
+	ServiceRepository serviceRepository;
 	
 	@Autowired
 	DemandeRepository demandeRepository;

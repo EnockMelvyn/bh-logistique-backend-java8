@@ -32,6 +32,9 @@ public class Personnel implements Serializable{
 	@JoinColumn(name="direction_id")
 	private Direction direction;
 	
+	@ManyToOne
+	@JoinColumn(name="service_id")
+	private Service service;
 	@OneToMany(
 	mappedBy = "personnel",
     cascade = CascadeType.ALL,

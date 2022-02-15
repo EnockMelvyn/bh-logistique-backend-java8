@@ -38,7 +38,8 @@ public class MouvementStockController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+   
     @GetMapping("/{idMouvementStock}")
     public ResponseEntity<MouvementStock> getMouvementStockById(@PathVariable Long idMouvementStock){
         MouvementStock mouvementStock = new MouvementStock();
