@@ -1,6 +1,7 @@
 package bhci.dmg.bhLogistique.controllers;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bhci.dmg.bhLogistique.dao.DemandeDirection;
 import bhci.dmg.bhLogistique.dao.Direction;
+import bhci.dmg.bhLogistique.dto.PeriodeDto;
 import bhci.dmg.bhLogistique.services.DemandeDirectionService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -31,6 +33,12 @@ public class DemandeDirectionController {
 	public ResponseEntity<List<DemandeDirection>> getAllDemandeDirection() {
         return new ResponseEntity<>( demandeDirectionService.getAllDemandeDirection(), HttpStatus.OK);
     }
+	
+	@PostMapping("between")
+	public ResponseEntity<List<DemandeDirection>> getAllDemandeDirectionBetween(@RequestBody PeriodeDto periode){
+        return new ResponseEntity<>( demandeDirectionService.getDemandeDirectionByDateDemandeBetween(periode.getDebut(), periode.getFin()), HttpStatus.OK);
+    }
+	
 	
 	@GetMapping("status")
 	public ResponseEntity<List<DemandeDirection>> getDemandeByStatus(@RequestParam String codeStatus) {

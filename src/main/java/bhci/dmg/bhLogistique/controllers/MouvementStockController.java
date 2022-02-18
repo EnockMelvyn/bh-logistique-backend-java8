@@ -1,6 +1,5 @@
 package bhci.dmg.bhLogistique.controllers;
 
-import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
 import bhci.dmg.bhLogistique.services.MouvementStockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +19,15 @@ public class MouvementStockController {
     MouvementStockService mouvementStockService;
 
     @GetMapping
-    public ResponseEntity<List<MouvementStock>> getAllMouvementStocks(@RequestParam(required = false) Article article) {
+    public ResponseEntity<List<MouvementStock>> getAllMouvementStocks(@RequestParam(required = false) Long idArticle) {
 
         try {
             List<MouvementStock> mouvementStocks = new ArrayList<MouvementStock>();
-            if (article == null) {
+            if (idArticle == null) {
                 mouvementStocks = mouvementStockService.getAllMouvementStocks();
             }
             else {
-                mouvementStocks=mouvementStockService.getMouvementStockByArticle(article);
+                mouvementStocks=mouvementStockService.getMouvementStockByArticle(idArticle);
             }
             if (mouvementStocks.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

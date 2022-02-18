@@ -60,6 +60,12 @@ public class DemandeDirectionService {
 		return demandeDirectionRepository.findByStatus(statusRepository.findByCodeStatut(codeStatus));
 	}
 	
+	public List<DemandeDirection> getDemandeDirectionByDateDemandeBetween(LocalDateTime debut, LocalDateTime fin){
+		
+		return demandeDirectionRepository.findByDateDemandeBetween(debut, fin);
+	}
+	
+	
 	public DemandeDirection generateDemandeDirection(Long idDirection) {
 		Direction direction = directionRepository.findById(idDirection).get(); // Gerer l'exception
 		Status status = statusRepository.findByCodeStatut("ATT");

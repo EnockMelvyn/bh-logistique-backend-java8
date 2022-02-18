@@ -21,7 +21,7 @@ public class MouvementStock {
     private LocalDateTime dateMouvement;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
-    @JsonIgnore
+    
     private Article article;
     private double qteAvant;
     private double qteMouvement;

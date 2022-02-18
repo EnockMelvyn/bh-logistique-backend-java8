@@ -1,5 +1,6 @@
 package bhci.dmg.bhLogistique.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,9 @@ public interface DemandeDirectionRepository extends JpaRepository<DemandeDirecti
 	List<DemandeDirection> findByStatus(Status status);
 	
 	List<DemandeDirection> findByDirection(Direction direction);
-	
+
+	List<DemandeDirection> findByDateDemandeBetween(LocalDateTime dateDemandeStart, LocalDateTime dateDemandeEnd);
+
 	//Optional<DemandeDirection> findByDirectionAndStatus(Direction direction, Status status);
 	
 	List<DemandeDirection> findByDirectionAndStatus(Direction direction, Status status);

@@ -2,6 +2,7 @@ package bhci.dmg.bhLogistique.services;
 
 import bhci.dmg.bhLogistique.dao.Article;
 import bhci.dmg.bhLogistique.dao.MouvementStock;
+import bhci.dmg.bhLogistique.repository.ArticleRepository;
 import bhci.dmg.bhLogistique.repository.MouvementStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +14,20 @@ import java.util.List;
 public class MouvementStockService {
     @Autowired
     MouvementStockRepository mouvementStockRepository;
+    
+    @Autowired
+    ArticleRepository articleRepository;
 
     public List<MouvementStock> getAllMouvementStocks(){
         return this.mouvementStockRepository.findAll();
     }
 
-    public List<MouvementStock> getMouvementStockByArticle(Article article) {
-        return mouvementStockRepository.findByArticle(article);
+    public List<MouvementStock> getMouvementStockByArticle(Long idArticle) {
+    	Article article = articleRepository.findByIdArticle(idArticle);
+    	if(article.getIdArticle()!=null) {
+    		return mouvementStockRepository.findByArticle(article);
+    	}
+        return null;
     }
 
     public List<MouvementStock> getMouvementStockByDateMouvement(LocalDate dateMouvement) {
