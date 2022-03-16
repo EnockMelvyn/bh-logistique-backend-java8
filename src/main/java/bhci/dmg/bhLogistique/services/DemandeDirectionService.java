@@ -154,7 +154,7 @@ public class DemandeDirectionService {
 			element.setModifiedAt(LocalDateTime.now());
 			element.setDemandeDirection(demandeDirection);
 		});
-		
+		demandeDirection.setDateTransmissionDmg(LocalDateTime.now());
 		Status statusDMG = statusRepository.findByCodeStatut("DMG");
 		demDirDetRepo.saveAll(demandeDirection.getDemandeDirectionDetails());
 		demandeDirection.setStatus(statusDMG);

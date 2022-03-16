@@ -69,9 +69,9 @@ public class ArticleService {
         boolean articleExists = articleRepository.findByCodeArticle(article.getCodeArticle()).isPresent();
 
         if (articleExists) {
-            throw new IllegalStateException("Ce code sous-famille est déjà utilisé");
+            throw new IllegalStateException("Ce code article est déjà utilisé");
         }
 
-        return articleRepository.save(new Article(article.getLibelleArticle(), article.getCodeArticle(), article.getSousFamille()));
+        return articleRepository.save(new Article(article.getCodeArticle(), article.getLibelleArticle(), article.getSousFamille()));
     }
 }

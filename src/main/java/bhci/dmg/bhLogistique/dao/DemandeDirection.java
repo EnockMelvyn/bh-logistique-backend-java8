@@ -53,6 +53,9 @@ public class DemandeDirection implements Serializable {
     private Type typeDemande;
 
 
+    @Column(name = "date_transmission_dmg")
+    private LocalDateTime dateTransmissionDmg;
+
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
